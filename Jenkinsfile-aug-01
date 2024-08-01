@@ -55,5 +55,5 @@ version: '0.0.1-SNAPSHOT'
         deploy adapters: [tomcat9(credentialsId: 'tomcat-cr', path: '', url: 'http://localhost:8009/')], contextPath: 'aug1', war: 'target*/.war'
       }
     }
-  }
+ 
 }
