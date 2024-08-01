@@ -1,0 +1,59 @@
+pipeline{
+  agent any 
+  tools{
+    maven "Apache Maven 3.9.7"
+  }
+  stages{
+    stage('clonefromscm'){
+      steps{
+        sh "echo  Jenkins is clonefromscm"
+        git branch: 'class26', url: 'https://github.com/LimaJuni/liontech-joinedproject.git'
+
+      }
+    }
+
+    stage('Maven-Build'){
+      steps{
+        sh "echo 'running Junit testing'"
+        sh "echo'Maven is packing the source code'"
+        sh "mvn validate"
+        sh "mvn install"
+        sh "mvn clean package"
+      }
+    }
+
+    stage('sonarqube Code Quality Analyis'){
+      steps{
+        sh "echo 'Performing code Quality Analyis'"
+        sh  "mvn sonar:sonar"
+      }
+    }
+
+    stage('uploadArtifacttoNexus'){
+      steps{
+                nexusArtifactUploader artifacts: [
+  [
+    artifactId: '>onlinebookstore',
+     classifier: '',
+      file: 'target/onlinebookstore.war',
+       type: 'war'
+  ]
+], 
+credentialsId: 'nexus-cd',
+groupId: 'onlinebookstore',
+nexusUrl: '172.22.128.1:8081',
+nexusVersion: 'nexus3',
+protocol: 'http', 
+repository: 'class26-snapshot', 
+version: '0.0.1-SNAPSHOT'
+            }
+        }
+    }
+
+    stage('deploy to dev'){
+      steps{
+        deploy adapters: [tomcat9(credentialsId: 'tomcat-cr', path: '', url: 'http://localhost:8009/')], contextPath: 'aug1', war: 'target*/.war'
+      }
+    }
+  }
+}
