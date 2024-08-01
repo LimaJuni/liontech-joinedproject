@@ -24,8 +24,10 @@ pipeline{
 
     stage('sonarqube Code Quality Analyis'){
       steps{
+        withSonarQubeEnv(installationName: 'sonarqube-7.3', credentialsId: 'sonar-jenkins-token') {
         sh "echo 'Performing code Quality Analyis'"
         sh  "mvn sonar:sonar"
+        }
       }
     }
 
