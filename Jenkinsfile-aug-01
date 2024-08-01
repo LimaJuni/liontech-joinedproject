@@ -50,10 +50,10 @@ version: '0.0.1-SNAPSHOT'
         }
     }
 
-    stage('deploy to dev'){
-      steps{
-        deploy adapters: [tomcat9(credentialsId: 'tomcat-cr', path: '', url: 'http://localhost:8009/')], contextPath: 'aug1', war: 'target*/.war'
-      }
-    }
+   // stage('deploy to dev'){
+    //  steps{
+      //  deploy adapters: [tomcat9(credentialsId: 'tomcat-cr', path: '', url: 'http://localhost:8009/')], contextPath: 'aug1', war: 'target*/.war'
+    //  }
+   // }
  
 }
